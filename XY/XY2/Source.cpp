@@ -65,10 +65,7 @@ double camMinSpeed = pi / 1e4;
 double camratio = 0.05; // ÉJÉÅÉâà⁄ìÆéûÇÃí«è] 1Ç≈àÍèuÇ≈à⁄ìÆ
 
 // anime speed
-double fastAnimeSpeed = 1e-4;
-double normalAnimeSpeed = 3e-6;
-double slowAnimeSpeed = 1e-6;
-double animeSpeed = normalAnimeSpeed; // (ps per realSec) 1e-12
+double animeSpeed = 3e-6; // (ps per realSec) 1e-12
 
 #ifdef USE_OPENCV
 bool recordFlag = false;
@@ -355,7 +352,6 @@ void motion(int x, int y) {
 	}
 }
 
-
 int main(int argc,char** argv) {
 	glutInit(&argc, argv);;
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
@@ -394,28 +390,6 @@ int main(int argc,char** argv) {
 		glLightfv(GL_LIGHT0, GL_SPECULAR, lightspe);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, lightamb);
 	}
-/*	{
-		glEnable(GL_LIGHT1);
-		GLfloat lightpos[] = { 0.0, -1000.0, 0.0, 0.0 };
-		GLfloat lightdif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-		GLfloat lightamb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-		GLfloat lightspe[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glLightfv(GL_LIGHT1, GL_POSITION, lightpos);
-		glLightfv(GL_LIGHT1, GL_DIFFUSE, lightdif);
-		glLightfv(GL_LIGHT1, GL_SPECULAR, lightspe);
-		glLightfv(GL_LIGHT1, GL_AMBIENT, lightamb);
-	}
-	{
-		glEnable(GL_LIGHT1);
-		GLfloat lightpos[] = { 1000.0, 0.0, 0.0, 0.0 };
-		GLfloat lightdif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-		GLfloat lightamb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-		GLfloat lightspe[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glLightfv(GL_LIGHT1, GL_POSITION, lightpos);
-		glLightfv(GL_LIGHT1, GL_DIFFUSE, lightdif);
-		glLightfv(GL_LIGHT1, GL_SPECULAR, lightspe);
-		glLightfv(GL_LIGHT1, GL_AMBIENT, lightamb);
-	}*/
 	init();
 	glutMainLoop();
 #ifdef USE_OPENCV
@@ -464,15 +438,15 @@ void drawArrow(double amplitude,double s) {
 	GLfloat spe[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat emi[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	GLfloat shi = 50;
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, dif);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spe);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emi);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shi);
 
 	glRotated(90.0, 0, 0, 1);
 	glPushMatrix();
 	{
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, dif);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spe);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emi);
-		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shi);
 		glRotated(90.0, 1, 0, 0);
 		glutSolidCylinder(arrowRadius, arrowHeight * amplitude, 20, 20);
 	}
@@ -480,11 +454,6 @@ void drawArrow(double amplitude,double s) {
 
 	glPushMatrix();
 	{
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, dif);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spe);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emi);
-		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shi);
 		glTranslated(0, -arrowHeight * amplitude, 0);
 		glRotated(90.0, 1, 0, 0);
 		glutSolidCone(coneRadius, coneHeight, 20, 20);
@@ -505,6 +474,7 @@ void drawChirality() {
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spe);
 			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emi);
 			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shi);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
 
 			glRotated(90.0, 1, 0, 0);
 			glTranslated(arrowInterval, arrowInterval, 3000.0);
@@ -517,7 +487,6 @@ void drawChirality() {
 					float g = pow(max(0.f, -float(chi[id])),0.5f);
 					GLfloat dif[] = { r, g, 0.0f, max(r,g) };
 					glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, dif);
-					glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, amb);
 
 					int i = x - L / 2;
 					int j = y - L / 2;
